@@ -29,6 +29,10 @@ import {
   Calendar,
   User,
   TrendingUp,
+  Briefcase,
+  BookOpen,
+  Code,
+  Layers,
 } from "lucide-react";
 
 interface ResumeCardProps {
@@ -78,13 +82,6 @@ export function ResumeCard({ resume, onDelete }: ResumeCardProps) {
     }
   };
 
-  const getTotalSections = () => {
-    return Object.values(resume.sections).reduce(
-      (sum, count) => sum + count,
-      0
-    );
-  };
-
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
@@ -112,39 +109,25 @@ export function ResumeCard({ resume, onDelete }: ResumeCardProps) {
 
   return (
     <>
-      <Card className="group relative overflow-hidden bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/5 cursor-pointer">
-        <Link href={`/resume/${resume.id}`} className="block">
-          <CardContent className="p-6">
-            {/* Header with proper spacing */}
-            <div className="flex items-start justify-between mb-4 gap-3">
-              <div className="flex-1 min-w-0">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1 line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                  {resume.title}
-                </h3>
-                {resume.jobRole && (
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                    {resume.jobRole}
-                  </p>
-                )}
-                {resume.personalInfo && (
-                  <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-500">
-                    <User className="w-3 h-3" />
-                    {resume.personalInfo.fullName}
-                  </div>
-                )}
-              </div>
+      <Card className="group relative overflow-hidden bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/5">
+        <Link href={`/resume/${resume.id}`} className="block h-full">
+          <CardContent className="p-4 sm:p-5 flex flex-col h-full">
+            {/* Header with action buttons in a separate row */}
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white line-clamp-1 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors pr-2">
+                {resume.title}
+              </h3>
 
-              {/* Status Badge and Menu Container */}
-              <div className="flex items-start gap-2 flex-shrink-0">
+              {/* Action buttons row - properly spaced */}
+              <div className="flex items-center space-x-2 flex-shrink-0">
                 <Badge
-                  className={`text-xs px-2 py-1 ${getStatusStyle(
+                  className={`text-xs px-2 py-0.5 ${getStatusStyle(
                     resume.status
                   )}`}
                 >
                   {resume.status}
                 </Badge>
 
-                {/* Action Menu */}
                 <DropdownMenu>
                   <DropdownMenuTrigger
                     asChild
@@ -153,7 +136,7 @@ export function ResumeCard({ resume, onDelete }: ResumeCardProps) {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 opacity-0 group-hover:opacity-100 transition-all"
+                      className="h-7 w-7 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 opacity-70 group-hover:opacity-100 transition-all"
                     >
                       <MoreVertical className="w-4 h-4" />
                     </Button>
@@ -187,67 +170,101 @@ export function ResumeCard({ resume, onDelete }: ResumeCardProps) {
               </div>
             </div>
 
-            {/* ATS Score */}
-            <div className="mb-4">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-1">
-                  <TrendingUp className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
-                    ATS Score
+            {/* Job Role and User Info */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-xs text-gray-500 dark:text-gray-400 mb-3">
+              {resume.jobRole && (
+                <div className="flex items-center">
+                  <Briefcase className="w-3 h-3 mr-1 flex-shrink-0" />
+                  <span className="line-clamp-1">{resume.jobRole}</span>
+                </div>
+              )}
+
+              {resume.personalInfo && (
+                <div className="flex items-center">
+                  <User className="w-3 h-3 mr-1 flex-shrink-0" />
+                  <span className="line-clamp-1">
+                    {resume.personalInfo.fullName}
                   </span>
                 </div>
-                <div
-                  className={`text-sm font-semibold px-2 py-1 rounded ${getScoreColor(
-                    resume.atsScore
-                  )}`}
-                >
-                  {resume.atsScore}%
+              )}
+            </div>
+
+            {/* Main content section - grows to fill available space */}
+            <div className="flex-1 flex flex-col justify-between">
+              {/* ATS Score - More compact design */}
+              <div className="mb-3">
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="flex items-center gap-1">
+                    <TrendingUp className="w-3 h-3 text-blue-500" />
+                    <span className="text-xs text-gray-600 dark:text-gray-400">
+                      ATS Score
+                    </span>
+                  </div>
+                  <div
+                    className={`text-xs font-semibold px-2 py-0.5 rounded-full ${getScoreColor(
+                      resume.atsScore
+                    )}`}
+                  >
+                    {resume.atsScore}%
+                  </div>
+                </div>
+                <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-1.5">
+                  <div
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      resume.atsScore >= 90
+                        ? "bg-emerald-500"
+                        : resume.atsScore >= 80
+                        ? "bg-blue-500"
+                        : resume.atsScore >= 70
+                        ? "bg-amber-500"
+                        : "bg-red-500"
+                    }`}
+                    style={{ width: `${resume.atsScore}%` }}
+                  />
                 </div>
               </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-2">
-                <div
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    resume.atsScore >= 90
-                      ? "bg-emerald-500"
-                      : resume.atsScore >= 80
-                      ? "bg-blue-500"
-                      : resume.atsScore >= 70
-                      ? "bg-amber-500"
-                      : "bg-red-500"
-                  }`}
-                  style={{ width: `${resume.atsScore}%` }}
-                />
-              </div>
-            </div>
 
-            {/* Sections Summary */}
-            <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-              <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                Content Sections
+              {/* Sections Summary - Redesigned as a grid for better space usage */}
+              <div className="p-2.5 bg-gray-50 dark:bg-gray-800/50 rounded-lg mb-3">
+                <div className="text-xs text-gray-500 dark:text-gray-400 mb-2 font-medium">
+                  Content Sections
+                </div>
+                <div className="grid grid-cols-2 gap-x-3 gap-y-2">
+                  <div className="flex items-center text-xs text-gray-600 dark:text-gray-300">
+                    <BookOpen className="w-3 h-3 mr-1.5 text-blue-500" />
+                    <span>Education:</span>
+                    <span className="ml-auto font-medium">
+                      {resume.sections.education}
+                    </span>
+                  </div>
+                  <div className="flex items-center text-xs text-gray-600 dark:text-gray-300">
+                    <Briefcase className="w-3 h-3 mr-1.5 text-blue-500" />
+                    <span>Experience:</span>
+                    <span className="ml-auto font-medium">
+                      {resume.sections.experience}
+                    </span>
+                  </div>
+                  <div className="flex items-center text-xs text-gray-600 dark:text-gray-300">
+                    <Code className="w-3 h-3 mr-1.5 text-blue-500" />
+                    <span>Skills:</span>
+                    <span className="ml-auto font-medium">
+                      {resume.sections.skills}
+                    </span>
+                  </div>
+                  <div className="flex items-center text-xs text-gray-600 dark:text-gray-300">
+                    <Layers className="w-3 h-3 mr-1.5 text-blue-500" />
+                    <span>Projects:</span>
+                    <span className="ml-auto font-medium">
+                      {resume.sections.projects}
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600 dark:text-gray-300">
-                  Education: {resume.sections.education}
-                </span>
-                <span className="text-gray-600 dark:text-gray-300">
-                  Experience: {resume.sections.experience}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm mt-1">
-                <span className="text-gray-600 dark:text-gray-300">
-                  Skills: {resume.sections.skills}
-                </span>
-                <span className="text-gray-600 dark:text-gray-300">
-                  Projects: {resume.sections.projects}
-                </span>
-              </div>
-            </div>
 
-            {/* Footer */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
-                <Calendar className="w-3 h-3" />
-                {resume.lastEdited}
+              {/* Footer - Always at bottom */}
+              <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 mt-auto pt-1">
+                <Calendar className="w-3 h-3 mr-1.5" />
+                Last edited {resume.lastEdited}
               </div>
             </div>
           </CardContent>

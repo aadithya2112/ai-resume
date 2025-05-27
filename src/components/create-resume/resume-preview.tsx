@@ -633,10 +633,12 @@ export function ResumePreview({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white p-4">
           Resume Preview
         </h3>
-        <DownloadPDFButton latexCode={latexCode} />
+        <div className="p-4">
+          <DownloadPDFButton latexCode={latexCode} />
+        </div>
       </div>
 
       <div
