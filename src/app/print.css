@@ -1,0 +1,49 @@
+/* Print styles for resume PDF generation */
+@media print {
+  /* Hide everything except the resume content */
+  body * {
+    visibility: hidden;
+  }
+  
+  .resume-template-content, 
+  .resume-template-content * {
+    visibility: visible;
+  }
+  
+  .resume-template-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  /* Remove any scaling for cleaner output */
+  .transform.scale-75 {
+    transform: scale(1) !important;
+    width: 100% !important;
+  }
+  
+  /* Remove borders and shadows for cleaner print */
+  .resume-template-content {
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Ensure page break rules */
+  .page-break {
+    page-break-before: always;
+  }
+}
+
+/* Special class applied during printing */
+body.printing .resume-template-content {
+  display: block;
+  max-width: 100%;
+  margin: 0;
+  padding: 1cm;
+}
+
+/* Hide UI elements during printing */
+body.printing *:not(.resume-template-content):not(.resume-template-content *) {
+  display: none;
+}

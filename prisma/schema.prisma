@@ -1,0 +1,162 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model that links with Clerk's authentication
+model User {
+  id            String         @id // Uses Clerk's user ID
+  email         String         @unique
+  resumes       Resume[]
+  sharedResumes SharedResume[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+// Core Resume model
+model Resume {
+  id      String  @id @default(cuid())
+  userId  String
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title   String
+  jobRole String?
+
+  // Resume content sections
+  personalInfo    PersonalInfo?
+  educationItems  Education[]
+  experienceItems Experience[]
+  skills          Skill[]
+  projectItems    Project[]
+
+  // LaTeX code for the resume
+  latexCode String? @db.Text
+
+  // ATS scoring
+  atsScore Int? // Score from 0-100
+  atsNotes String? @db.Text // Feedback on improving ATS score
+
+  // Sharing
+  sharedLinks SharedResume[]
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  CoverLetter CoverLetter?
+}
+
+// Personal Information section
+model PersonalInfo {
+  id        String   @id @default(cuid())
+  resumeId  String   @unique
+  resume    Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  fullName  String
+  email     String
+  phone     String?
+  location  String?
+  website   String?
+  linkedin  String?
+  github    String?
+  summary   String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Education section
+model Education {
+  id           String    @id @default(cuid())
+  resumeId     String
+  resume       Resume    @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  institution  String
+  degree       String
+  fieldOfStudy String?
+  startDate    DateTime
+  endDate      DateTime?
+  gpa          String?
+  location     String?
+  description  String?   @db.Text
+  order        Int       @default(0) // For ordering multiple education entries
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+// Experience section - with AI enhancement
+model Experience {
+  id            String    @id @default(cuid())
+  resumeId      String
+  resume        Resume    @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  company       String
+  position      String
+  location      String?
+  startDate     DateTime
+  endDate       DateTime?
+  isCurrentRole Boolean   @default(false)
+  description   String?   @db.Text // Original description
+  enhancedDesc  String?   @db.Text // AI-enhanced description
+  order         Int       @default(0) // For ordering multiple experience entries
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+// Skills section
+model Skill {
+  id        String   @id @default(cuid())
+  resumeId  String
+  resume    Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  name      String
+  level     String? // e.g., "Beginner", "Intermediate", "Advanced"
+  category  String? // e.g., "Technical", "Soft Skills", "Languages"
+  order     Int      @default(0) // For ordering skills
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Projects section
+model Project {
+  id           String    @id @default(cuid())
+  resumeId     String
+  resume       Resume    @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  title        String
+  description  String?   @db.Text
+  technologies String[] // Array of technologies used
+  link         String?
+  startDate    DateTime?
+  endDate      DateTime?
+  isOngoing    Boolean   @default(false)
+  order        Int       @default(0) // For ordering projects
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+// Resume sharing functionality
+model SharedResume {
+  id         String    @id @default(cuid())
+  resumeId   String
+  resume     Resume    @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User      @relation(fields: [userId], references: [id])
+  shareToken String    @unique // Unique token for accessing the shared resume
+  expiresAt  DateTime? // Optional expiration date
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@unique([resumeId, userId])
+}
+
+// Cover Letter (BONUS feature)
+model CoverLetter {
+  id        String   @id @default(cuid())
+  resumeId  String
+  resume    Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  content   String   @db.Text
+  latexCode String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([resumeId])
+}
