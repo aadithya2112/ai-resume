@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { DashboardSidebar } from "@/components/dashboard-sidebar";
+import { FaCheck, FaFileAlt, FaMagic, FaBolt } from "react-icons/fa";
 
 declare global {
   interface Window {
@@ -132,7 +133,7 @@ export default function CoverLetterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-white dark:bg-gradient-to-b dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Sidebar */}
       <DashboardSidebar
         collapsed={sidebarCollapsed}
@@ -145,221 +146,287 @@ export default function CoverLetterPage() {
           sidebarCollapsed ? "ml-20" : "ml-64"
         } p-6`}
       >
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8 text-slate-800 dark:text-slate-100">
-            Generate Cover Letter
+        {/* Header */}
+        <div className="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg p-5 mb-6 shadow-lg max-w-screen-xl mx-auto">
+          <h1 className="text-2xl font-bold text-white text-center">
+            Cover Letter Generator
           </h1>
+          <p className="text-blue-100 text-center mt-2">
+            Upload your resume and job description to create a tailored cover
+            letter
+          </p>
+        </div>
 
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-md flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-2"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              {error}
-            </div>
-          )}
+        {/* Error Message */}
+        {error && (
+          <div className="max-w-screen-xl mx-auto mb-6 p-4 bg-red-100 dark:bg-red-900/20 border-l-4 border-red-500 text-red-700 dark:text-red-300 rounded-md flex items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 mr-2"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                clipRule="evenodd"
+              />
+            </svg>
+            {error}
+          </div>
+        )}
 
-          <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm p-6 mb-8">
-            <form onSubmit={handleSubmit} className="space-y-8">
-              {/* Resume Upload Section */}
-              <div className="space-y-3">
-                <label className="block text-base font-medium text-slate-700 dark:text-slate-300">
-                  Upload Resume (PDF)
-                </label>
-                <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-slate-300 dark:border-slate-600 border-dashed rounded-lg hover:border-slate-400 dark:hover:border-slate-500 transition-colors">
-                  <div className="space-y-2 text-center">
-                    <svg
-                      className="mx-auto h-12 w-12 text-slate-400"
-                      stroke="currentColor"
-                      fill="none"
-                      viewBox="0 0 48 48"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    <div className="flex text-sm text-slate-600 dark:text-slate-400">
-                      <label
-                        htmlFor="file-upload"
-                        className="relative cursor-pointer rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none"
-                      >
-                        <span>Upload a file</span>
-                        <input
-                          id="file-upload"
-                          name="file-upload"
-                          type="file"
-                          accept=".pdf"
-                          onChange={handleFileChange}
-                          className="sr-only"
-                        />
-                      </label>
-                      <p className="pl-1">or drag and drop</p>
-                    </div>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      PDF files only
-                    </p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-screen-xl mx-auto">
+          {/* Left Column - Inputs */}
+          <div className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* File Upload Section */}
+              <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6 border border-slate-200 dark:border-slate-700/50">
+                <div className="flex items-center space-x-2 mb-4">
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                    <FaFileAlt className="h-4 w-4 text-white" />
                   </div>
+                  <h2 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                    Upload Your Resume
+                  </h2>
                 </div>
-                {fileName && (
-                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-400 flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 mr-1 text-green-500"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span>{fileName}</span>
+
+                <div
+                  className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-6 
+                            bg-slate-100 dark:bg-slate-700/30 hover:bg-slate-200 dark:hover:bg-slate-700/50 
+                            transition-colors cursor-pointer text-center"
+                  onClick={() =>
+                    document.getElementById("file-upload")?.click()
+                  }
+                >
+                  <svg
+                    className="w-10 h-10 mx-auto text-slate-500 dark:text-slate-400 mb-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                    ></path>
+                  </svg>
+
+                  <div className="text-slate-700 dark:text-slate-300 font-medium mb-1">
+                    {fileName
+                      ? "Resume uploaded!"
+                      : "Click to upload your resume"}
+                  </div>
+                  <p className="text-sm text-slate-500/70 dark:text-slate-400/70">
+                    {fileName || "PDF files only"}
                   </p>
-                )}
+
+                  <input
+                    id="file-upload"
+                    name="file-upload"
+                    type="file"
+                    accept=".pdf"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                </div>
+
+                {/* Preview Section */}
                 {resumeText && (
-                  <div className="mt-3">
-                    <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                      Resume Content Preview:
-                    </p>
-                    <div className="mt-1 p-3 bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-700 rounded-md overflow-auto max-h-40">
-                      <p className="text-sm text-slate-600 dark:text-slate-400 whitespace-pre-line">
-                        {resumeText.substring(0, 300)}
-                        {resumeText.length > 300 ? "..." : ""}
-                      </p>
+                  <div className="mt-4">
+                    <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 flex items-center">
+                      <FaFileAlt className="h-4 w-4 mr-1 text-blue-500" />
+                      Resume Content Preview
+                    </h3>
+                    <div className="p-3 bg-slate-100 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700/50 rounded-md overflow-auto max-h-32 text-xs text-slate-700 dark:text-slate-300">
+                      {resumeText.substring(0, 300)}
+                      {resumeText.length > 300 ? "..." : ""}
                     </div>
                   </div>
                 )}
               </div>
 
               {/* Job Description Section */}
-              <div className="space-y-3">
-                <label
-                  htmlFor="jobDescription"
-                  className="block text-base font-medium text-slate-700 dark:text-slate-300"
-                >
-                  Job Description
-                </label>
+              <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6 border border-slate-200 dark:border-slate-700/50">
+                <div className="flex items-center space-x-2 mb-4">
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                    <FaFileAlt className="h-4 w-4 text-white" />
+                  </div>
+                  <h2 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                    Enter Job Description
+                  </h2>
+                </div>
                 <textarea
                   id="jobDescription"
-                  rows={6}
+                  rows={5}
                   placeholder="Paste the job description here..."
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
-                  className="mt-1 block w-full rounded-md border-slate-300 dark:border-slate-700 
-                    shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-800 
-                    dark:text-slate-100 p-4 transition duration-150 ease-in-out"
+                  className="w-full rounded-md border-slate-300 dark:border-slate-600
+                    shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-30
+                    dark:bg-slate-800/80 dark:text-slate-200 p-3"
                 />
               </div>
 
-              {/* Submit Button */}
-              <div className="pt-2">
-                <button
-                  type="submit"
-                  disabled={isLoading || !resumeText || !jobDescription}
-                  className="w-full sm:w-auto inline-flex justify-center items-center py-3 px-6 border border-transparent 
-                    shadow-sm text-base font-medium rounded-md text-white bg-blue-600 
-                    hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
-                    focus:ring-blue-500 disabled:bg-blue-300 disabled:cursor-not-allowed
-                    transition-colors duration-200"
-                >
-                  {isLoading ? (
-                    <>
-                      <svg
-                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Generating...
-                    </>
-                  ) : (
-                    "Generate Cover Letter"
-                  )}
-                </button>
-              </div>
+              {/* Generate Button */}
+              <button
+                type="submit"
+                disabled={isLoading || !resumeText || !jobDescription}
+                className="w-full py-4 px-6 bg-gradient-to-r from-blue-500 to-cyan-500 
+                  hover:from-blue-600 hover:to-cyan-600 text-white text-lg font-bold rounded-lg 
+                  shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed
+                  disabled:hover:from-blue-500 disabled:hover:to-cyan-500 focus:outline-none focus:ring-2
+                  focus:ring-blue-500 focus:ring-opacity-50"
+              >
+                {isLoading ? (
+                  <div className="flex items-center justify-center">
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Generating Cover Letter...
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center">
+                    <FaMagic className="h-5 w-5 mr-2" />
+                    Generate Cover Letter
+                  </div>
+                )}
+              </button>
             </form>
+
+            {/* Tips Section */}
+            <div className="bg-slate-100 dark:bg-slate-700/30 rounded-lg p-4 border border-slate-200 dark:border-slate-700/50">
+              <div className="flex items-center space-x-2 mb-3">
+                <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-md flex items-center justify-center">
+                  <FaCheck className="h-3 w-3 text-white" />
+                </div>
+                <h3 className="text-slate-800 dark:text-slate-200 font-medium">
+                  Tips for a Great Cover Letter
+                </h3>
+              </div>
+              <ul className="text-sm text-slate-600 dark:text-slate-300 space-y-2 list-inside ml-2">
+                <li className="flex items-start">
+                  <FaCheck className="h-4 w-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                  <span>
+                    Tailor your letter to the specific job and company
+                  </span>
+                </li>
+                <li className="flex items-start">
+                  <FaCheck className="h-4 w-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                  <span>Be concise and keep your letter to one page</span>
+                </li>
+                <li className="flex items-start">
+                  <FaCheck className="h-4 w-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                  <span>Proofread for grammar and spelling errors</span>
+                </li>
+                <li className="flex items-start">
+                  <FaCheck className="h-4 w-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                  <span>Highlight your most relevant experiences</span>
+                </li>
+              </ul>
+            </div>
           </div>
 
-          {/* Results Section */}
-          {coverLetter && (
-            <div className="mt-8 bg-white dark:bg-slate-800 rounded-lg shadow-sm overflow-hidden">
-              <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
-                <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-100">
-                  Your Cover Letter
-                </h2>
-                <button
-                  onClick={handleCopyToClipboard}
-                  className="inline-flex items-center px-3 py-2 border border-slate-300 
-                    dark:border-slate-700 text-sm font-medium rounded-md 
-                    text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800
-                    hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-150
-                    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  {copied ? (
-                    <>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 mr-2 text-green-500"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      Copied!
-                    </>
-                  ) : (
-                    <>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 mr-2"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z" />
-                        <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 010 2h-2v-2z" />
-                      </svg>
-                      Copy to Clipboard
-                    </>
-                  )}
-                </button>
+          {/* Right Column - Output */}
+          <div className="h-full">
+            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md h-full border border-slate-200 dark:border-slate-700/50 flex flex-col">
+              <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 dark:from-blue-900/30 dark:to-cyan-900/30 p-4 border-b border-slate-200 dark:border-slate-700/50 flex justify-between items-center">
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                    <FaBolt className="h-4 w-4 text-white" />
+                  </div>
+                  <h2 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                    Your Cover Letter
+                  </h2>
+                </div>
+                {coverLetter && (
+                  <button
+                    onClick={handleCopyToClipboard}
+                    className="inline-flex items-center px-3 py-2 bg-gradient-to-r from-blue-500 to-cyan-500
+                      hover:from-blue-600 hover:to-cyan-600 text-sm font-medium rounded-md text-white 
+                      transition-colors duration-150 focus:outline-none focus:ring-2 
+                      focus:ring-blue-500 focus:ring-opacity-50"
+                  >
+                    {copied ? (
+                      <>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4 mr-2"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        Copied!
+                      </>
+                    ) : (
+                      <>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4 mr-2"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
+                          />
+                        </svg>
+                        Copy to Clipboard
+                      </>
+                    )}
+                  </button>
+                )}
               </div>
-              <div className="p-6 whitespace-pre-line text-slate-700 dark:text-slate-300 leading-relaxed">
-                {coverLetter}
+
+              <div className="flex-1 overflow-auto p-6">
+                {coverLetter ? (
+                  <div className="whitespace-pre-line text-slate-700 dark:text-slate-300 leading-relaxed">
+                    {coverLetter}
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full text-center p-6">
+                    <div className="w-16 h-16 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-full flex items-center justify-center mb-4">
+                      <FaBolt className="w-8 h-8 text-blue-500/70" />
+                    </div>
+                    <h3 className="text-xl font-medium bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-2">
+                      No Cover Letter Generated Yet
+                    </h3>
+                    <p className="text-slate-500 dark:text-slate-400">
+                      Upload your resume and enter a job description, then click
+                      the generate button.
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
-          )}
+          </div>
         </div>
       </main>
     </div>
