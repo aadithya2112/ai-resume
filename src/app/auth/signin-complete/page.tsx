@@ -58,10 +58,10 @@ export default function SignInComplete() {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-4">
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-6 rounded-lg max-w-md w-full text-center">
-          <h2 className="text-xl font-bold text-red-700 dark:text-red-400 mb-2">
+          {/* <h2 className="text-xl font-bold text-red-700 dark:text-red-400 mb-2">
             Error
           </h2>
-          <p className="text-red-600 dark:text-red-300 mb-4">{error}</p>
+          <p className="text-red-600 dark:text-red-300 mb-4">{error}</p> */}
           <button
             onClick={() => router.push("/dashboard")}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
